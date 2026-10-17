@@ -1,0 +1,279 @@
+{
+  "info": {
+    "_postman_id": "78a2f3e8-5b4d-4cf2-8321-7299a910be43",
+    "name": "TechServices-API (Ejercicio 1)",
+    "description": "Colección de pruebas para la API REST segura de consulta de clientes con cuota de tokens (api-techservices). Cumple los requisitos E1.01 a E1.13.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Consulta Exitosa Cliente (200 OK - Descuenta 1 Token)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{apiBaseUrl}}/api/clientes/{{clientId}}",
+          "host": [
+            "{{apiBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes",
+            "{{clientId}}"
+          ]
+        },
+        "description": "Consulta cliente por ID con credenciales válidas y saldo positivo. Debe retornar 200 OK y descontar exactamente 1 token."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Segunda Consulta Sucesiva (200 OK - Verifica Segundo Descuento)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{apiBaseUrl}}/api/clientes/{{clientId}}",
+          "host": [
+            "{{apiBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes",
+            "{{clientId}}"
+          ]
+        },
+        "description": "Segunda consulta inmediata. Debe retornar 200 OK y el saldo de tokens debe disminuir en 1 respecto a la consulta anterior."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Cliente Inexistente (404 Not Found - No Descuenta Tokens)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{apiBaseUrl}}/api/clientes/999999",
+          "host": [
+            "{{apiBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes",
+            "999999"
+          ]
+        },
+        "description": "Consulta un ID que no existe. Debe retornar 404 Not Found y el saldo en base de datos NO debe disminuir."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Error de Seguridad: Falta x-api-key (401 Unauthorized)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{apiBaseUrl}}/api/clientes/{{clientId}}",
+          "host": [
+            "{{apiBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes",
+            "{{clientId}}"
+          ]
+        },
+        "description": "Petición omitiendo la cabecera x-api-key. Debe retornar 401 Unauthorized."
+      },
+      "response": []
+    },
+    {
+      "name": "5. Error de Seguridad: Falta Authorization (401 Unauthorized)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{apiBaseUrl}}/api/clientes/{{clientId}}",
+          "host": [
+            "{{apiBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes",
+            "{{clientId}}"
+          ]
+        },
+        "description": "Petición omitiendo la cabecera Authorization. Debe retornar 401 Unauthorized."
+      },
+      "response": []
+    },
+    {
+      "name": "6. Error de Seguridad: Credenciales Inválidas (401 Unauthorized)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "API_KEY_INCORRECTA",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer TOKEN_SEGURO_123456",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{apiBaseUrl}}/api/clientes/{{clientId}}",
+          "host": [
+            "{{apiBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes",
+            "{{clientId}}"
+          ]
+        },
+        "description": "Petición con credencial inexistente. Debe retornar 401 Unauthorized."
+      },
+      "response": []
+    },
+    {
+      "name": "7. Error de Seguridad: Credenciales Cruzadas (401 Unauthorized)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "MI_API_KEY_2026",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer TOKEN_EMPRESA_SEC_2026",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{apiBaseUrl}}/api/clientes/{{clientId}}",
+          "host": [
+            "{{apiBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes",
+            "{{clientId}}"
+          ]
+        },
+        "description": "Petición con API Key de usuario 1 y Token de usuario 2. Debe rechazar con 401 Unauthorized."
+      },
+      "response": []
+    },
+    {
+      "name": "8. Error de Seguridad: Usuario Inactivo (403 Forbidden)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "KEY_INACTIVO_999",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer TOKEN_INACTIVO_999999",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{apiBaseUrl}}/api/clientes/{{clientId}}",
+          "host": [
+            "{{apiBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes",
+            "{{clientId}}"
+          ]
+        },
+        "description": "Usuario registrado pero con estado INACTIVO. Debe retornar 403 Forbidden."
+      },
+      "response": []
+    },
+    {
+      "name": "9. Control de Cuota: Usuario Sin Saldo de Tokens (429 Too Many Requests)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "KEY_SIN_TOKENS_001",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer TOKEN_SIN_SALDO_000000",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{apiBaseUrl}}/api/clientes/{{clientId}}",
+          "host": [
+            "{{apiBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes",
+            "{{clientId}}"
+          ]
+        },
+        "description": "Usuario activo pero con tokens_disponibles = 0. Debe retornar 429 Too Many Requests con mensaje de cuota agotada."
+      },
+      "response": []
+    }
+  ]
+}

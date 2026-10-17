@@ -1,0 +1,22 @@
+# Root .gitignore
+**/target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# IDE files
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.classpath
+.project
+.settings/
+
+# Secrets and environment
+.env
+*.local
+
+# System files
+Thumbs.db
+Desktop.ini

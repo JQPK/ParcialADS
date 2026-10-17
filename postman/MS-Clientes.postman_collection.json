@@ -1,0 +1,328 @@
+{
+  "info": {
+    "_postman_id": "bf87c631-50e1-456c-a81d-e18e87399066",
+    "name": "MS-Clientes (Ejercicio 2)",
+    "description": "Colección completa de pruebas para el microservicio autónomo ms-clientes (CRUD de clientes, control de cuota solo en GET, Swagger y seguridad por cabeceras). Cumple los requisitos E2.01 a E2.14.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. GET - Listar Todos los Clientes (200 OK - Descuenta 1 Token)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{msBaseUrl}}/api/clientes",
+          "host": [
+            "{{msBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes"
+          ]
+        },
+        "description": "Consulta general de clientes. Descuenta exactamente 1 token de la cuota del usuario autorizado."
+      },
+      "response": []
+    },
+    {
+      "name": "2. GET - Obtener Cliente por ID (200 OK - Descuenta 1 Token)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{msBaseUrl}}/api/clientes/{{clientId}}",
+          "host": [
+            "{{msBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes",
+            "{{clientId}}"
+          ]
+        },
+        "description": "Consulta individual por ID. Descuenta 1 token solo si el cliente existe."
+      },
+      "response": []
+    },
+    {
+      "name": "3. POST - Crear Cliente Válido (201 Created - NO Descuenta Token)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombres\": \"Renato\",\n  \"apellidos\": \"Salas Quispe\",\n  \"dni\": \"72345678\",\n  \"correoElectronico\": \"renato.salas@techservices.pe\",\n  \"telefono\": \"987123456\"\n}"
+        },
+        "url": {
+          "raw": "{{msBaseUrl}}/api/clientes",
+          "host": [
+            "{{msBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes"
+          ]
+        },
+        "description": "Operación de escritura CREATE. Persiste el cliente y NO descuenta tokens."
+      },
+      "response": []
+    },
+    {
+      "name": "4. POST - Error DNI Duplicado (409 Conflict)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombres\": \"Otro Cliente\",\n  \"apellidos\": \"Con Mismo DNI\",\n  \"dni\": \"12345678\",\n  \"correoElectronico\": \"otro.correo@techservices.pe\",\n  \"telefono\": \"987000111\"\n}"
+        },
+        "url": {
+          "raw": "{{msBaseUrl}}/api/clientes",
+          "host": [
+            "{{msBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes"
+          ]
+        },
+        "description": "Intento de registro con un DNI existente (12345678). Retorna 409 Conflict."
+      },
+      "response": []
+    },
+    {
+      "name": "5. POST - Validación Formato Inválido (400 Bad Request)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombres\": \"\",\n  \"apellidos\": \"Pérez\",\n  \"dni\": \"123\",\n  \"correoElectronico\": \"correo-invalido\",\n  \"telefono\": \"123\"\n}"
+        },
+        "url": {
+          "raw": "{{msBaseUrl}}/api/clientes",
+          "host": [
+            "{{msBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes"
+          ]
+        },
+        "description": "Envío de datos inválidos (DNI menor a 8 dígitos, nombres vacíos, correo no válido). Retorna 400 Bad Request."
+      },
+      "response": []
+    },
+    {
+      "name": "6. PUT - Actualizar Cliente Existente (200 OK - NO Descuenta Token)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombres\": \"Ana María\",\n  \"apellidos\": \"Torres Ramos\",\n  \"dni\": \"12345678\",\n  \"correoElectronico\": \"ana.torres.actualizado@techservices.pe\",\n  \"telefono\": \"999111222\"\n}"
+        },
+        "url": {
+          "raw": "{{msBaseUrl}}/api/clientes/{{clientId}}",
+          "host": [
+            "{{msBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes",
+            "{{clientId}}"
+          ]
+        },
+        "description": "Operación de escritura UPDATE. Modifica el cliente por su ID y NO descuenta tokens."
+      },
+      "response": []
+    },
+    {
+      "name": "7. DELETE - Eliminar Cliente (204 No Content - NO Descuenta Token)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{msBaseUrl}}/api/clientes/{{clientId}}",
+          "host": [
+            "{{msBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes",
+            "{{clientId}}"
+          ]
+        },
+        "description": "Operación de escritura DELETE. Elimina el cliente y retorna 204 No Content sin cuerpo ni descuento de tokens."
+      },
+      "response": []
+    },
+    {
+      "name": "8. DELETE / PUT - ID Inexistente (404 Not Found)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{msBaseUrl}}/api/clientes/999999",
+          "host": [
+            "{{msBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes",
+            "999999"
+          ]
+        },
+        "description": "Eliminación sobre ID inexistente. Retorna 404 Not Found."
+      },
+      "response": []
+    },
+    {
+      "name": "9. Swagger UI (200 OK - Acceso Público)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{msBaseUrl}}/swagger-ui/index.html",
+          "host": [
+            "{{msBaseUrl}}"
+          ],
+          "path": [
+            "swagger-ui",
+            "index.html"
+          ]
+        },
+        "description": "Verifica que la documentación interactiva Swagger UI cargue públicamente sin requerir cabeceras de autenticación."
+      },
+      "response": []
+    },
+    {
+      "name": "10. OpenAPI Docs JSON (200 OK - Acceso Público)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{msBaseUrl}}/v3/api-docs",
+          "host": [
+            "{{msBaseUrl}}"
+          ],
+          "path": [
+            "v3",
+            "api-docs"
+          ]
+        },
+        "description": "Verifica la especificación OpenAPI en formato JSON."
+      },
+      "response": []
+    }
+  ]
+}
