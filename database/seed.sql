@@ -5,7 +5,8 @@
 -- Al menos dos usuarios autorizados y al menos cinco clientes.
 -- =====================================================================
 
-USE bd_techservices;
+-- En entornos locales: USE bd_techservices;
+-- En Clever Cloud / Nube: Asegúrate de tener seleccionada tu base de datos en el panel izquierdo.
 
 -- 1. Insertar usuarios autorizados para consumir la API
 -- Usuario 1: Credenciales oficiales del enunciado del examen (10 tokens iniciales)

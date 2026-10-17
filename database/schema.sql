@@ -5,12 +5,12 @@
 -- Compatible con: MySQL 8.0+ / phpMyAdmin / MariaDB 10+
 -- =====================================================================
 
--- 1. Crear base de datos si no existe
-CREATE DATABASE IF NOT EXISTS bd_techservices
-    CHARACTER SET utf8mb4
-    COLLATE utf8mb4_unicode_ci;
-
-USE bd_techservices;
+-- 1. En entornos locales puedes descomentar las siguientes líneas si requieres crear la BD:
+-- CREATE DATABASE IF NOT EXISTS bd_techservices CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- USE bd_techservices;
+--
+-- En la nube (Clever Cloud, Aiven, etc.), selecciona tu base de datos en el menú izquierdo de phpMyAdmin
+-- y ejecuta las sentencias CREATE TABLE directamente:
 
 -- 2. Eliminar tablas previas si existieran para permitir inicialización limpia
 DROP TABLE IF EXISTS clientes;
