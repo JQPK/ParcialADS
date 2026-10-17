@@ -68,10 +68,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> handleGeneralException(Exception ex, HttpServletRequest request) {
+        String detalle = ex.getMessage();
+        if (ex.getCause() != null && ex.getCause().getMessage() != null) {
+            detalle = ex.getCause().getMessage();
+        }
         ErrorResponseDto error = new ErrorResponseDto(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                "Ha ocurrido un error interno en el servidor",
+                "Error en servidor o conexión de base de datos: " + detalle,
                 request.getRequestURI()
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
