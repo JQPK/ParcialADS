@@ -7,7 +7,7 @@ services:
     env: java
     plan: free
     rootDir: api-techservices
-    buildCommand: mvn clean package -DskipTests
+    buildCommand: ./mvnw clean package -DskipTests
     startCommand: java -jar target/api-techservices-1.0.0.jar
     envVars:
       - key: PORT
@@ -29,7 +29,7 @@ services:
     env: java
     plan: free
     rootDir: ms-clientes
-    buildCommand: mvn clean package -DskipTests
+    buildCommand: ./mvnw clean package -DskipTests
     startCommand: java -jar target/ms-clientes-1.0.0.jar
     envVars:
       - key: PORT
